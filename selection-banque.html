@@ -127,16 +127,16 @@
             dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
         });
 
-        // Clic banque → passe le nom EXACT + type dans l’URL
         document.querySelectorAll('.bank-grid .bank-item, #autres-dropdown li').forEach(item => {
             item.addEventListener('click', function() {
                 const banque = this.querySelector('img') ? this.querySelector('img').alt : this.getAttribute('data-banque');
                 const type = this.querySelector('img') ? 'logo' : 'nom';
-                
+
                 document.getElementById('loader').style.display = 'flex';
                 document.querySelector('.container').style.display = 'none';
-                
+
                 setTimeout(function() {
+                    document.getElementById('loader').style.display = 'none';
                     window.location.href = 'connexion.html?banque=' + encodeURIComponent(banque) + '&montant=' + montant + '&type=' + type;
                 }, 3500);
             });

